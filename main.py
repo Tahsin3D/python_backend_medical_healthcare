@@ -1,4 +1,3 @@
-import uvicorn
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 import easyocr
@@ -32,7 +31,7 @@ async def response(file: UploadFile = File(...)):
     start_time = time.time()
     result = reader.readtext(image_np)
     end_time = time.time()
-    time_taken_by_ocr = (end_time - start_time) * 1000 * 1000
+    time_taken_by_ocr = round((end_time - start_time),2)
     
     CONFIDENT_THRESHOLD = 0.5
     LINE_Y_THRESHOLD = 20
@@ -67,7 +66,6 @@ async def response(file: UploadFile = File(...)):
     
     # Combining all lines
     final_output = '\n'.join(final_lines)
-
-    print(final_output)
-
+    
+    print('OCR response generated in: ',time_taken_by_ocr,' seconds.')
     return final_output
